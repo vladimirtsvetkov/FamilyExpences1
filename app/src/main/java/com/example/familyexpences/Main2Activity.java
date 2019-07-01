@@ -59,6 +59,14 @@ public class Main2Activity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main2, menu);
+
+        //Add Dashboard on login
+
+        Fragment fragment = new DashboardFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.placeholder, fragment);
+        transaction.commit();
         return true;
     }
 
