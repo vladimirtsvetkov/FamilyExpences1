@@ -6,15 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/login_background"
     android:weightSum="10"
     tools:context=".RegisterActivity">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="295dp"
-        android:layout_weight="3"
-        app:srcCompat="@drawable/registration" />
+        android:id="@+id/imageView2"
+        android:layout_width="285dp"
+        android:layout_height="61dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/user" />
 
     <TextView
         android:id="@+id/textView"
@@ -24,60 +26,106 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="Create registration"
-        android:textColor="@android:color/background_dark"
-        android:textSize="30sp" />
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        android:fontFamily="@font/dancing_script"/>
 
     <EditText
         android:id="@+id/nameET"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:ems="10"
-        android:gravity="center"
+        android:background="#10ffffff"
+        android:ems="15"
         android:hint="Name"
         android:inputType="textPersonName"
-        android:textSize="24sp" />
+        android:textColor="#fff"
+        android:textColorHint="#fff"
+        android:textSize="14sp"
+        android:paddingLeft="10dp" />
 
     <EditText
         android:id="@+id/passwordET"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="1"
-        android:ems="10"
-        android:gravity="center"
+        android:background="#10ffffff"
+        android:ems="15"
         android:hint="Enter password"
         android:inputType="textPassword"
-        android:textSize="24sp" />
+        android:textColor="#fff"
+        android:textColorHint="#fff"
+        android:textSize="14sp"
+        android:paddingLeft="10dp" />
 
     <EditText
         android:id="@+id/repeatPasswordET"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="1"
-        android:ems="10"
-        android:gravity="center"
+        android:background="#10ffffff"
+        android:ems="15"
         android:hint="Repeat password"
         android:inputType="textPassword"
-        android:textSize="24sp" />
+        android:textColor="#fff"
+        android:textColorHint="#fff"
+        android:textSize="14sp"
+        android:paddingLeft="10dp" />
 
     <EditText
         android:id="@+id/usernameET"
-        android:layout_width="match_parent"
-        android:layout_height="63dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="1"
-        android:ems="10"
-        android:gravity="center"
+        android:background="#10ffffff"
+        android:ems="15"
         android:hint="Enter username"
         android:inputType="textPersonName"
-        android:textSize="24sp" />
+        android:textColor="#fff"
+        android:textColorHint="#fff"
+        android:textSize="14sp"
+        android:paddingLeft="10dp" />
 
     <Button
         android:id="@+id/createBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="5dp"
         android:layout_marginTop="10dp"
         android:layout_weight="1"
-        android:text="Create registration" />
+        android:text="Create registration"
+        android:background="@drawable/login_button"
+        android:textColor="#fff"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal">
+
+        <View
+            android:layout_width="100dp"
+            android:layout_height="1px"
+            android:layout_gravity="center"
+            android:background="#fff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/dancing_script"
+            android:text="Already have account"
+            android:textColor="#fff" />
+
+        <View
+            android:layout_width="100dp"
+            android:layout_height="1px"
+            android:layout_gravity="center"
+            android:background="#fff" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/alreadyRegisteredBtn"
@@ -85,7 +133,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_weight="1"
+        android:fontFamily="@font/dancing_script"
         android:gravity="center"
-        android:text="Already registered?"
+        android:text="Login now"
+        android:textColor="#fff"
         android:textSize="18sp" />
 </LinearLayout>
