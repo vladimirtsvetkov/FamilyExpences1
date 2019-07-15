@@ -1,6 +1,8 @@
 package com.example.familyexpences;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -16,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Main2Activity extends AppCompatActivity
@@ -23,14 +27,18 @@ public class Main2Activity extends AppCompatActivity
         DashboardFragment.OnFragmentInteractionListener {
 
 
+    NavigationView mNavigationView;
+    View mHeaderView;
+
+    TextView textViewUsername;
+    TextView textViewEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -41,6 +49,27 @@ public class Main2Activity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Navigtion View
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        // NavigationView Header
+        mHeaderView =  mNavigationView.getHeaderView(0);
+
+        // View
+        textViewUsername = (TextView) mHeaderView.findViewById(R.id.textViewUsername);
+        textViewEmail= (TextView) mHeaderView.findViewById(R.id.textViewEmail);
+
+        String UserName = "";
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            UserName = extras.getString("username");
+            //The key argument here must match that used in the other activity
+        }
+        // Set username & email
+        textViewUsername.setText(UserName);
+        textViewEmail.setText(UserName + "@email.com");
+
+        mNavigationView.setNavigationItemSelectedListener(this);
        // Window w = getWindow();
         //w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
@@ -131,6 +160,28 @@ public class Main2Activity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
             finish();
+        } else if(id == R.id.nav_about){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (!isFinishing()){
+                        new AlertDialog.Builder(Main2Activity.this)
+                                .setTitle("Information")
+                                .setIcon(android.R.drawable.ic_dialog_info)
+                                .setMessage("This is a university project. \n" +
+                                        "This is the possession of Vladimir and Deniz. " +
+                                        "All rights reserved ®")
+                                .setCancelable(false)
+                                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Whatever...
+                                    }
+                                }).show();
+                    }
+                }
+            });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

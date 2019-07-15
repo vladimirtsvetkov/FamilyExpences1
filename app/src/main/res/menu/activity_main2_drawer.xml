@@ -32,10 +32,18 @@
                 android:id="@+id/nav_share"
                 android:icon="@drawable/share"
                 android:title="Share" />
+        </menu>
+    </item>
+    <item android:title="Application">
+        <menu>
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/exit"
                 android:title="Exit" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/icons8_info_100"
+                android:title="About" />
         </menu>
     </item>
 

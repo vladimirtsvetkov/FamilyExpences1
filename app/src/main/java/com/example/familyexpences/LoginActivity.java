@@ -46,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
                     final String password = passwordET.getText().toString();
                     if (db.login(username, password)) {
                         intent = new Intent(LoginActivity.this, Main2Activity.class);
+                        intent.putExtra("username",username);
                         startActivity(intent);
                     } else {
                         Toast.makeText(LoginActivity.this, "Wrong username or password",
