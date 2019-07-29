@@ -135,6 +135,12 @@ public class Main2Activity extends AppCompatActivity
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
 
+        }else if(id==R.id.nav_expenses)
+        {   Fragment expensesfragment = new ExpensesFragment();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction transaction = fm.beginTransaction();
+            transaction.replace(R.id.placeholder, expensesfragment);
+            transaction.commit();
         } else if (id == R.id.nav_categories) {
             Fragment categoriesfragment = new CategoriesFragment();
             FragmentManager fm = getSupportFragmentManager();

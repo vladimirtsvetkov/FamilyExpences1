@@ -9,6 +9,10 @@
             android:icon="@drawable/dashboard"
             android:title="Dashboard" />
         <item
+            android:id="@+id/nav_expenses"
+            android:icon="@drawable/money2"
+            android:title="Expenses" />
+        <item
             android:id="@+id/nav_categories"
             android:icon="@drawable/categories"
             android:title="Categories" />
