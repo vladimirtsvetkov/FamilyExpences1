@@ -1,34 +1,414 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="100px"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:fillViewport="true">
 
-    <EditText
-        android:id="@+id/name_expense"
+    <LinearLayout
+        android:id="@+id/expensesLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/rounded_corners"
-        android:hint="Enter your expense here" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="70dp"
+        android:orientation="vertical"
+        tools:context=".ExpensesFragment">
 
-    <Spinner
-        android:id="@+id/spinner1"
-        android:layout_width="161dp"
-        android:layout_height="53dp"
-        android:layout_below="@+id/name_expense"
-        android:layout_alignEnd="@+id/name_expense"
-        android:layout_marginEnd="218dp"
-        android:dropDownWidth="100px" />
 
-    <DatePicker
-        android:id="@+id/datePicker1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100px"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner" />
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/TVExpenseName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Expense name" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="248dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/rounded_corners"
+                android:ems="10"
+                android:hint="Enter expense name"
+                android:inputType="textPersonName"
+                android:paddingLeft="10dp" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="30dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/categories" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/TVEnterDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Expense details" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <EditText
+                android:id="@+id/editText4"
+                android:layout_width="249dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/rounded_corners"
+                android:ems="10"
+                android:hint="Enter details"
+                android:inputType="textPersonName"
+                android:paddingLeft="10dp" />
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="30dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/categories" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/TVExpenseAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Expense amount" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <EditText
+                android:id="@+id/editText5"
+                android:layout_width="186dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/rounded_corners"
+                android:ems="10"
+                android:hint="Enter amount"
+                android:inputType="numberDecimal"
+                android:paddingLeft="10dp" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="30dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/money2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/TVESelectCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Expense Category" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <Spinner
+                android:id="@+id/planets_spinner"
+                android:layout_width="248dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/TVESelectDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Expense Date" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <DatePicker
+                android:id="@+id/datePicker1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Add" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/TVEAvailableExpenses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Available Expenses" />
+
+        </LinearLayout>
+
+        <TableLayout
+            android:id="@+id/tableLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:shrinkColumns="*"
+            android:stretchColumns="*">
+
+            <TableRow
+                android:id="@+id/tableRow_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#16a085"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_span="6"
+                    android:gravity="center"
+                    android:text="Expenses for"
+                    android:textColor="#ffffff"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:typeface="serif" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#1abc9c"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/TextView_item_name"
+                    android:text="Item"
+                    android:textColor="#000000"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/TextView_quantity_no"
+                    android:text="Description"
+                    android:textColor="#000000"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/TextView_availability"
+                    android:text="Price"
+                    android:textColor="#000000"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/textView_Delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Delete"
+                    android:textColor="#000000"
+                    android:typeface="serif" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="#bdc3c7"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/TextView_item"
+                    android:text="Apple"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/TextView_quantity"
+                    android:text="10 kg"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/TextView_available"
+                    android:text="Yes"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/textView_Delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_delete_style"
+                    android:gravity="center"
+                    android:text="Delete"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="24sp"
+                    android:typeface="serif" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="#bdc3c7"
+                android:gravity="center">
+
+                <TextView
+                    android:text="orange"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:text="20 kg"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:text="Yes"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/textView_available2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_delete_style"
+                    android:gravity="center"
+                    android:text="Delete"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="24sp"
+                    android:typeface="serif" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="#bdc3c7"
+                android:gravity="center">
+
+                <TextView
+                    android:text="Banana"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:text="40 kg"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:text="Yes"
+                    android:typeface="serif"></TextView>
+
+                <TextView
+                    android:id="@+id/textView_available3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_delete_style"
+                    android:gravity="center"
+                    android:text="Delete"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="24sp"
+                    android:typeface="serif" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="#bdc3c7"
+                android:gravity="center">
+
+                <TextView
+                    android:text="Apricot"
+                    android:typeface="serif"></TextView>
+
+                <TextView
+                    android:text="20 kg"
+                    android:typeface="serif"></TextView>
+
+                <TextView
+                    android:text="No"
+                    android:typeface="serif"></TextView>
+
+                <TextView
+                    android:id="@+id/textView_available4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_delete_style"
+                    android:gravity="center"
+                    android:text="Delete"
+                    android:textColor="@android:color/background_light"
+                    android:textSize="24sp"
+                    android:typeface="serif" />
+            </TableRow>
+
+        </TableLayout>
+
+    </LinearLayout>
+</ScrollView>
