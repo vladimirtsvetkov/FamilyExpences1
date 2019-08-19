@@ -2,10 +2,18 @@ package com.example.familyexpences;
 
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.example.familyexpences.DB.SQLiteDatabaseHelper;
+import com.google.android.material.snackbar.Snackbar;
 
 
 /**
@@ -28,6 +36,8 @@ public class CategoriesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    Button AddCategoryBT;
+    EditText AddCategoryET;
     public CategoriesFragment() {
         // Required empty public constructor
     }
@@ -66,6 +76,32 @@ public class CategoriesFragment extends Fragment {
         getActivity().setTitle("Categories");
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        AddCategoryBT = (Button) getView().findViewById(R.id.AddCategoryBT);
+        AddCategoryET = (EditText) getView().findViewById(R.id.AddCategoryET);
+
+
+
+        AddCategoryBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(AddCategoryET.getText().length() == 0){
+                    Toast.makeText(getActivity(),"Enter Category!",Toast.LENGTH_SHORT).show();
+                }else{
+                    final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
+                    db.addCategory(AddCategoryET.getText().toString());
+                }
+
+            }
+        });
+
+        //ImageView imageView = (ImageView) getView().findViewById(R.id.foo);
+        // or  (ImageView) view.findViewById(R.id.foo);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
