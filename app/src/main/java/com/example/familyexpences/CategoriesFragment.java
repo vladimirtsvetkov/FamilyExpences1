@@ -1,5 +1,6 @@
 package com.example.familyexpences;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -8,12 +9,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.familyexpences.DB.SQLiteDatabaseHelper;
+import com.example.familyexpences.DTOs.Category;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -38,6 +45,7 @@ public class CategoriesFragment extends Fragment {
 
     Button AddCategoryBT;
     EditText AddCategoryET;
+    ListView CategoryLV;
     public CategoriesFragment() {
         // Required empty public constructor
     }
@@ -81,27 +89,38 @@ public class CategoriesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+
         AddCategoryBT = (Button) getView().findViewById(R.id.AddCategoryBT);
         AddCategoryET = (EditText) getView().findViewById(R.id.AddCategoryET);
+        CategoryLV  = (ListView) getView().findViewById(R.id.CategoryLV);
 
+        final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
+        final List<String> CategoriesList = db.getCategories();
 
+        System.out.println(CategoriesList);
+
+        ArrayAdapter<String> CategoriesAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                R.layout.support_simple_spinner_dropdown_item,
+                CategoriesList);
+
+        CategoryLV.setAdapter(CategoriesAdapter);
 
         AddCategoryBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if(AddCategoryET.getText().length() == 0){
                     Toast.makeText(getActivity(),"Enter Category!",Toast.LENGTH_SHORT).show();
                 }else{
-                    final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
-                    db.addCategory(AddCategoryET.getText().toString());
+                    if (db.addCategory(AddCategoryET.getText().toString())) {
+                        Toast.makeText(getActivity(),"Success! " + AddCategoryET.getText().toString()+ " was added to the list!" ,Toast.LENGTH_SHORT).show();
+                        AddCategoryET.setText("");
+                    } else {
+                        Toast.makeText(getActivity(),"Error!",Toast.LENGTH_SHORT).show();
+                    }
                 }
-
             }
         });
-
-        //ImageView imageView = (ImageView) getView().findViewById(R.id.foo);
-        // or  (ImageView) view.findViewById(R.id.foo);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
