@@ -77,6 +77,17 @@ public class CategoriesFragment extends Fragment {
         }
     }
 
+    public void viewData() {
+        final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
+        final List<String> CategoriesList = db.getCategories();
+
+        ArrayAdapter<String> CategoriesAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                R.layout.support_simple_spinner_dropdown_item,
+                CategoriesList);
+        CategoryLV.setAdapter(CategoriesAdapter);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,22 +100,11 @@ public class CategoriesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-
         AddCategoryBT = (Button) getView().findViewById(R.id.AddCategoryBT);
         AddCategoryET = (EditText) getView().findViewById(R.id.AddCategoryET);
         CategoryLV  = (ListView) getView().findViewById(R.id.CategoryLV);
 
-        final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
-        final List<String> CategoriesList = db.getCategories();
-
-        System.out.println(CategoriesList);
-
-        ArrayAdapter<String> CategoriesAdapter = new ArrayAdapter<String>(
-                getActivity(),
-                R.layout.support_simple_spinner_dropdown_item,
-                CategoriesList);
-
-        CategoryLV.setAdapter(CategoriesAdapter);
+        viewData();
 
         AddCategoryBT.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,9 +112,11 @@ public class CategoriesFragment extends Fragment {
                 if(AddCategoryET.getText().length() == 0){
                     Toast.makeText(getActivity(),"Enter Category!",Toast.LENGTH_SHORT).show();
                 }else{
+                    final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
                     if (db.addCategory(AddCategoryET.getText().toString())) {
                         Toast.makeText(getActivity(),"Success! " + AddCategoryET.getText().toString()+ " was added to the list!" ,Toast.LENGTH_SHORT).show();
                         AddCategoryET.setText("");
+                        viewData();
                     } else {
                         Toast.makeText(getActivity(),"Error!",Toast.LENGTH_SHORT).show();
                     }
@@ -122,6 +124,8 @@ public class CategoriesFragment extends Fragment {
             }
         });
     }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
