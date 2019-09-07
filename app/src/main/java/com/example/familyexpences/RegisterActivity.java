@@ -1,6 +1,8 @@
 package com.example.familyexpences;
 
 import android.content.Intent;
+
+
 import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.familyexpences.DB.SQLiteDatabaseHelper;
 import com.example.familyexpences.DTOs.User;
@@ -18,8 +21,10 @@ public class RegisterActivity extends AppCompatActivity {
     LinearLayout background;
     EditText usernameET;
     EditText passwordET;
+    EditText nameET;
     EditText repeatPasswordET;
     Button createBtn;
+    Button RegisterNewFamilyMemberBT;
     TextView alreadyRegisteredBtn;
 
     @Override
@@ -31,9 +36,12 @@ public class RegisterActivity extends AppCompatActivity {
         usernameET = findViewById(R.id.usernameET);
         passwordET = findViewById(R.id.passwordET);
         repeatPasswordET = findViewById(R.id.repeatPasswordET);
+        nameET = findViewById(R.id.nameET);
 
         createBtn = findViewById(R.id.createBtn);
+        RegisterNewFamilyMemberBT = findViewById(R.id.RegisterNewFamilyMemberBT);
         alreadyRegisteredBtn = findViewById(R.id.alreadyRegisteredBtn);
+        RegisterNewFamilyMemberBT.setOnClickListener(onClick);
         createBtn.setOnClickListener(onClick);
         alreadyRegisteredBtn.setOnClickListener(onClick);
 
@@ -49,30 +57,45 @@ public class RegisterActivity extends AppCompatActivity {
                 case R.id.createBtn:
                     String username = usernameET.getText().toString();
                     String password = passwordET.getText().toString();
-                    String name = usernameET.getText().toString();
+                    String name = nameET.getText().toString();
 
                     User user = new User(username, password, name);
-
+                    
                     if (usernameET.getText().length() == 0 ||
                             passwordET.getText().length() == 0 ||
+                            nameET.getText().length() == 0 ||
                             !passwordET.getText().toString().
                                     equals(repeatPasswordET.getText().toString())) {
-                        Snackbar.make(background, "Error", Snackbar.LENGTH_LONG)
+                        Snackbar.make(background, "Error, fill valid data!", Snackbar.LENGTH_LONG)
                                 .show();
                         return;
                     }
 //
                     SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(RegisterActivity.this);
-                    db.insertUser(user);
+
+                    if (db.insertUser(user)) {
+                        intent = new Intent(RegisterActivity.this, Main2Activity.class);
+                        intent.putExtra("username",username);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Error: username already exists!",
+                                Toast.LENGTH_LONG).show();
+                    }
+
                     break;
                 case R.id.alreadyRegisteredBtn:
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     startActivity(intent);
                     break;
+                case R.id.RegisterNewFamilyMemberBT:
+                    Intent RegisterNewFamilyMember = new Intent(RegisterActivity.this, RegisterNewFamilyMemberActivity.class);
+                    startActivity(RegisterNewFamilyMember);
+                    break;
+
             }
 
-            intent = new Intent(RegisterActivity.this, LoginActivity.class);
-            startActivity(intent);
+            //intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            //startActivity(intent);
         }
     };
 }

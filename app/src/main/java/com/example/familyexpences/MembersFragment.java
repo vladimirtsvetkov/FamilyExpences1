@@ -2,10 +2,21 @@ package com.example.familyexpences;
 
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.familyexpences.DB.SQLiteDatabaseHelper;
+
+import java.util.List;
 
 
 /**
@@ -28,6 +39,13 @@ public class MembersFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    EditText MemberUserNameET;
+    EditText MemberNameET;
+    EditText MemberPasswordET;
+    EditText MemberRepeatPasswordET;
+    Button AddMemberBT;
+    ListView MembersLV;
+
     public MembersFragment() { }
 
     // TODO: Rename and change types and number of parameters
@@ -48,6 +66,17 @@ public class MembersFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    public void viewData() {
+        final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
+        final List<String> MembersList = db.getUsers();
+        System.out.println(MembersList);
+
+        ArrayAdapter<String> MembersAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                R.layout.support_simple_spinner_dropdown_item,
+                MembersList);
+        MembersLV.setAdapter(MembersAdapter);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +86,38 @@ public class MembersFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_members, container, false);
         return view;
 
+    }
+
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        MemberUserNameET = (EditText) getView().findViewById(R.id.MemberUserNameET);
+        MemberNameET = (EditText) getView().findViewById(R.id.MemberNameET);
+        MemberPasswordET = (EditText) getView().findViewById(R.id.MemberPasswordET);
+        MemberRepeatPasswordET = (EditText) getView().findViewById(R.id.MemberRepeatPasswordET);
+        MembersLV  = (ListView) getView().findViewById(R.id.MembersLV);
+        AddMemberBT = (Button) getView().findViewById(R.id.AddMemberBT);
+
+        viewData();
+
+        /*AddCategoryBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(AddCategoryET.getText().length() == 0){
+                    Toast.makeText(getActivity(),"Enter Category!",Toast.LENGTH_SHORT).show();
+                }else{
+                    final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
+                    if (db.addCategory(AddCategoryET.getText().toString())) {
+                        Toast.makeText(getActivity(),"Success! " + AddCategoryET.getText().toString()+ " was added to the list!" ,Toast.LENGTH_SHORT).show();
+                        AddCategoryET.setText("");
+                        viewData();
+                    } else {
+                        Toast.makeText(getActivity(),"Error!",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });*/
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -17,7 +17,7 @@ import java.util.List;
 
 public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int VERSION = 10;
+    public static final int VERSION = 11;
     public static final String DB_NAME = "FamilyExpenses.db";
 
     public static final String TABLE_USERS = "user";
@@ -29,6 +29,7 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_USERS_USERNAME = "username";
     public static final String TABLE_USERS_PASSWORD = "password";
     public static final String TABLE_USERS_NAME = "name";
+    public static final String TABLE_USERS_FAMILY_ID = "FamilyID";
 
 
     public static final String TABLE_FAMILIES_ID = "id";
@@ -50,6 +51,7 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
             + "('" + TABLE_USERS_ID + "' INTEGER PRIMARY KEY AUTOINCREMENT," +
             "'" + TABLE_USERS_USERNAME + "' varchar(50) NOT NULL UNIQUE," +
             "'" + TABLE_USERS_PASSWORD + "' varchar(50) NOT NULL," +
+            "'" + TABLE_USERS_FAMILY_ID + "' INTEGER(11)," +
             "'" + TABLE_USERS_NAME + "' varchar(50) NOT NULL," +
             " FOREIGN KEY ('" + TABLE_FAMILIES_ID + "') REFERENCES " + TABLE_FAMILIES +
             "('" + TABLE_FAMILIES_ID + "'))";
@@ -135,6 +137,7 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
             cv.put(TABLE_USERS_NAME, user.getName());
 
             long id = db.insert(TABLE_USERS, null, cv);
+            insertFamily(user.getName(), (int) id);
             if (id != -1)
                 return true;
 
@@ -148,12 +151,36 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
+        public boolean insertFamily(String FamilyName, int AdminID) {
+        SQLiteDatabase db = null;
+        try {
+            db = getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put(TABLE_FAMILIES_NAME, FamilyName);
+            cv.put(TABLE_FAMILIES_ADMIN_ID, AdminID);
+
+            long id = db.insert(TABLE_USERS, null, cv);
+            if (id != -1)
+                return true;
+
+        } catch (SQLException e) {
+            Log.wtf(MYERROR, e.getMessage());
+        } finally {
+            if (db != null)
+                db.close();
+        }
+
+        return false;
+    }
+
+
+
     public List<String> getUsers() {
         SQLiteDatabase db = null;
         List<String> usernames = new ArrayList<String>();
         try {
             db = getReadableDatabase();
-            String sql = "SELECT " + TABLE_USERS_NAME + " FROM " + TABLE_USERS;
+            String sql = "SELECT " + TABLE_USERS_USERNAME + " FROM " + TABLE_USERS;
             Cursor c = db.rawQuery(sql, null);
             while (c.moveToNext()) {
                 String username = c.getString(c.getColumnIndex(TABLE_USERS_USERNAME));
@@ -205,6 +232,25 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
 
         return false;
     }
+    public boolean deleteCategory(String name) {
+        SQLiteDatabase db = null;
+
+        try {
+            db = getWritableDatabase();
+
+            long id = db.delete(TABLE_CATEGORIES, TABLE_CATEGORIES_NAME + "=?", new String[]{name});
+            if (id != -1)
+                return true;
+
+        } catch (SQLException e) {
+            Log.wtf("MYERROR", e.getMessage());
+        } finally {
+            if (db != null)
+                db.close();
+        }
+
+        return false;
+    }
 
     public List<Expense> getExpenses() {
         SQLiteDatabase db = null;
@@ -230,4 +276,17 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
 
         return expenses;
     }
+
+   public String CurrentUser(String username){
+        SQLiteDatabase db = null;
+       db = getReadableDatabase();
+
+       String sql = "SELECT * FROM " + TABLE_USERS
+               + " WHERE " + TABLE_USERS_USERNAME + " = '" + username + "'";
+
+
+       Cursor c = db.rawQuery(sql, null);
+
+       return username;
+   }
 }
