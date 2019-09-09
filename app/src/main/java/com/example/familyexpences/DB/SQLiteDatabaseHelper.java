@@ -17,20 +17,20 @@ import java.util.List;
 
 public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int VERSION = 11;
+    public static final int VERSION = 12;
     public static final String DB_NAME = "FamilyExpenses.db";
 
     public static final String TABLE_USERS = "user";
     public static final String TABLE_CATEGORIES = "categories";
     public static final String TABLE_FAMILIES = "families";
     public static final String TABLE_EXPENSES = "expenses";
+    public static final String TABLE_WAITING_FOR_APPROVAL = "waitingForApproval";
 
     public static final String TABLE_USERS_ID = "id";
     public static final String TABLE_USERS_USERNAME = "username";
     public static final String TABLE_USERS_PASSWORD = "password";
     public static final String TABLE_USERS_NAME = "name";
     public static final String TABLE_USERS_FAMILY_ID = "FamilyID";
-
 
     public static final String TABLE_FAMILIES_ID = "id";
     public static final String TABLE_FAMILIES_NAME = "name";
@@ -45,6 +45,11 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_EXPENSES_DATE_OF_ADDING = "date_of_adding";
     public static final String TABLE_EXPENSES_DESCRIPTION = "description";
     public static final String TABLE_EXPENSES_PRICE = "price";
+
+    public static final String TABLE_WAITING_FOR_APPROVAL_REQUEST_ID = "request_id";
+    public static final String TABLE_WAITING_FOR_APPROVAL_FAMILY_ID = "family_id";
+    public static final String TABLE_WAITING_FOR_APPROVAL_USER_ID = "user_id";
+
 
 
     public static final String CREATE_TABLE_USERS = "CREATE TABLE " + TABLE_USERS
@@ -81,6 +86,14 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
             " FOREIGN KEY ('" + TABLE_EXPENSES_USER_ID + "') REFERENCES " + TABLE_USERS + "('" + TABLE_USERS_ID + "'))";
 
 
+    public static final String CREATE_TABLE_WAITING_FOR_APPROVAL = "CREATE TABLE " + TABLE_WAITING_FOR_APPROVAL
+            + "('" + TABLE_WAITING_FOR_APPROVAL_REQUEST_ID + "' INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "'" + TABLE_WAITING_FOR_APPROVAL_FAMILY_ID + "' INTEGER(11) NOT NULL," +
+            "'" + TABLE_WAITING_FOR_APPROVAL_USER_ID + "' INTEGER(11) NOT NULL," +
+            " FOREIGN KEY ('" + TABLE_WAITING_FOR_APPROVAL_FAMILY_ID + "') REFERENCES " + TABLE_FAMILIES + "('" + TABLE_FAMILIES_ID + "')," +
+            " FOREIGN KEY ('" + TABLE_WAITING_FOR_APPROVAL_USER_ID + "') REFERENCES " + TABLE_USERS + "('" + TABLE_USERS_ID + "'))";
+
+
     public static final String MYERROR = "MYERROR";
 
     public SQLiteDatabaseHelper(Context context) {
@@ -93,6 +106,7 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_USERS);
         db.execSQL(CREATE_TABLE_FAMILIES);
         db.execSQL(CREATE_TABLE_EXPENSES);
+        db.execSQL(CREATE_TABLE_WAITING_FOR_APPROVAL);
     }
 
     @Override
@@ -101,6 +115,7 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAMILIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSES);
+        db.execSQL("DROP TABLE IF EXISTS " +  TABLE_WAITING_FOR_APPROVAL);
         onCreate(db);
     }
 
@@ -159,7 +174,7 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
             cv.put(TABLE_FAMILIES_NAME, FamilyName);
             cv.put(TABLE_FAMILIES_ADMIN_ID, AdminID);
 
-            long id = db.insert(TABLE_USERS, null, cv);
+            long id = db.insert(TABLE_FAMILIES, null, cv);
             if (id != -1)
                 return true;
 
@@ -288,5 +303,25 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
        Cursor c = db.rawQuery(sql, null);
 
        return username;
+   }
+
+   public List<String> getFamilies(){
+
+       SQLiteDatabase db = null;
+       List<String> families = new ArrayList<String>();
+       try {
+           db = getReadableDatabase();
+           String sql = "SELECT "  + TABLE_FAMILIES_NAME
+                   +" FROM " + TABLE_FAMILIES;
+           Cursor c = db.rawQuery(sql, null);
+           while (c.moveToNext()) {
+               String FamilyName = c.getString(c.getColumnIndex(TABLE_FAMILIES_NAME));
+               families.add(FamilyName);
+           }
+       } catch (Exception e) {
+           Log.wtf(MYERROR, e.getMessage());
+       }
+
+       return families;
    }
 }

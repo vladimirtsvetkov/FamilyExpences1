@@ -86,7 +86,7 @@ public class Main2Activity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.main2, menu);
 
         //Add Dashboard on login
@@ -114,49 +114,30 @@ public class Main2Activity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
         if (id == R.id.nav_dashboard) {
-            // Handle the camera action
             Fragment fragment = new DashboardFragment();
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
             transaction.replace(R.id.placeholder, fragment);
             transaction.commit();
-
-            Context context = getApplicationContext();
-            CharSequence text = "Hello toast!";
-            int duration = Toast.LENGTH_SHORT;
-
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
-
         }else if(id==R.id.nav_expenses)
         {   Fragment expensesfragment = new ExpensesFragment();
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
             transaction.replace(R.id.placeholder, expensesfragment);
             transaction.commit();
         } else if (id == R.id.nav_categories) {
             Fragment categoriesfragment = new CategoriesFragment();
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
             transaction.replace(R.id.placeholder, categoriesfragment);
             transaction.commit();
         } else if (id == R.id.nav_members) {
             Fragment membersFragment = new MembersFragment();
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
             transaction.replace(R.id.placeholder, membersFragment);
             transaction.commit();
         } else if (id == R.id.nav_statistics) {
             Fragment statisticsFragment = new StatisticsFragment();
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction transaction = fm.beginTransaction();
             transaction.replace(R.id.placeholder, statisticsFragment);
             transaction.commit();
 
