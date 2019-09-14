@@ -41,7 +41,7 @@
     <item android:title="Application">
         <menu>
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_exit"
                 android:icon="@drawable/exit"
                 android:title="Exit" />
             <item

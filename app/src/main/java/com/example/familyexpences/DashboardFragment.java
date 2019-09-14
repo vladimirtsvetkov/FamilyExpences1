@@ -2,11 +2,24 @@ package com.example.familyexpences;
 
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.familyexpences.DB.SQLiteDatabaseHelper;
+import com.example.familyexpences.DTOs.Expense;
+
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -20,6 +33,8 @@ import android.widget.TextView;
 public class DashboardFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    CalendarView calendarView;
+    ListView expensesListView;
 
     public DashboardFragment() { }
 
@@ -29,14 +44,78 @@ public class DashboardFragment extends Fragment {
         // Inflate the layout for this fragment
         getActivity().setTitle("Dashboard");
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        expensesListView = view.findViewById(R.id.expensesListView);
 
-        TextView current_month_income_TV  = view.findViewById(R.id.current_month_income_TV);
-        TextView current_expe_income_TV = view.findViewById(R.id.current_month_expense_TV);
-
-        current_month_income_TV.setText("Current expenses: ");
-
-        current_expe_income_TV.setText("Current expenses: ");
         return view;
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        calendarView = (CalendarView) view.findViewById(R.id.dashboardCalendar);
+        final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
+
+        Date myDate = this.getYesterday(calendarView.getDate());
+        Date lastDate = this.getMidnight(calendarView.getDate());
+
+
+
+//        List<Expense> expenses = db.getExpenses();
+        List<Expense> expenses = db.getExpenses(myDate.getTime(), lastDate.getTime());
+        BigDecimal sum = new BigDecimal("0");
+
+        for (Expense item : expenses
+        ) {
+            BigDecimal price = item.getPrice();
+            sum = sum.add(price);
+        }
+
+        ExpenseListAdapter adapter = new ExpenseListAdapter(getActivity(), R.layout.adapter_view_layout, expenses);
+        expensesListView.setAdapter(adapter);
+
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
+                String date = "some";
+                Calendar selectedDate = Calendar.getInstance();
+                selectedDate.set(Calendar.YEAR,i);
+                selectedDate.set(Calendar.MONDAY,i1);
+                selectedDate.set(Calendar.DAY_OF_MONTH,i2);
+
+                Date myDate = getYesterday(selectedDate.getTimeInMillis());
+                Date lastDate = getMidnight(selectedDate.getTimeInMillis());
+
+                List<Expense> newExpenses = db.getExpenses(myDate.getTime(), lastDate.getTime());
+                ExpenseListAdapter newAdapter = new ExpenseListAdapter(getActivity(), R.layout.adapter_view_layout, newExpenses);
+                expensesListView.setAdapter(newAdapter);
+            }
+        });
+
+
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    public Date getYesterday(long millis) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millis);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+
+        return calendar.getTime();
+    }
+
+    public Date getMidnight(long millis){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millis);
+        calendar.set(Calendar.MILLISECOND, 999);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+
+        return calendar.getTime();
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.example.familyexpences;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.familyexpences.Constants.Constants;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -118,40 +121,37 @@ public class Main2Activity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
+        Fragment fragment = null;
+
+
         if (id == R.id.nav_dashboard) {
-            Fragment fragment = new DashboardFragment();
-            transaction.replace(R.id.placeholder, fragment);
-            transaction.commit();
+            fragment  = new DashboardFragment();
+
         }else if(id==R.id.nav_expenses)
-        {   Fragment expensesfragment = new ExpensesFragment();
-            transaction.replace(R.id.placeholder, expensesfragment);
-            transaction.commit();
+        {   fragment = new ExpensesFragment();
+
         } else if (id == R.id.nav_categories) {
-            Fragment categoriesfragment = new CategoriesFragment();
-            transaction.replace(R.id.placeholder, categoriesfragment);
-            transaction.commit();
+            fragment = new CategoriesFragment();
+
         } else if (id == R.id.nav_members) {
-            Fragment membersFragment = new MembersFragment();
-            transaction.replace(R.id.placeholder, membersFragment);
-            transaction.commit();
+            fragment= new MembersFragment();
+
         } else if (id == R.id.nav_statistics) {
-            Fragment statisticsFragment = new StatisticsFragment();
-            transaction.replace(R.id.placeholder, statisticsFragment);
-            transaction.commit();
+            fragment  = new StatisticsFragment();
 
         } else if(id == R.id.nav_reports){
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
-            finish();
+        } else if (id == R.id.nav_exit) {
+            SharedPreferences sp = getSharedPreferences(Constants.LOGIN, MODE_PRIVATE);
+            sp.edit().putString(Constants.LOGGED_USER, "").apply();
+            Intent intent = new Intent(Main2Activity.this,LoginActivity.class);
+            startActivity(intent);
         } else if(id == R.id.nav_about){
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
                     if (!isFinishing()){
                         new AlertDialog.Builder(Main2Activity.this)
                                 .setTitle("Information")
@@ -169,6 +169,13 @@ public class Main2Activity extends AppCompatActivity
                     }
                 }
             });
+        }
+
+        if (fragment != null) {
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction transaction = fm.beginTransaction();
+            transaction.replace(R.id.placeholder, fragment);
+            transaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

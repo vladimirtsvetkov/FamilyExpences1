@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.familyexpences.Constants.Constants;
+import com.example.familyexpences.DTOs.Category;
 import com.example.familyexpences.DTOs.Expense;
 import com.example.familyexpences.DTOs.User;
 
@@ -17,10 +19,10 @@ import java.util.List;
 
 public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int VERSION = 12;
+    public static final int VERSION = 13;
     public static final String DB_NAME = "FamilyExpenses.db";
 
-    public static final String TABLE_USERS = "user";
+   /* public static final String TABLE_USERS = "user";
     public static final String TABLE_CATEGORIES = "categories";
     public static final String TABLE_FAMILIES = "families";
     public static final String TABLE_EXPENSES = "expenses";
@@ -41,6 +43,7 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_EXPENSES_ID = "id";
     public static final String TABLE_EXPENSES_CATEGORY_ID = "category_id";
+    public static final String TABLE_EXPENSES_EXPENSE_NAME = "expense_name";
     public static final String TABLE_EXPENSES_USER_ID = "user_id";
     public static final String TABLE_EXPENSES_DATE_OF_ADDING = "date_of_adding";
     public static final String TABLE_EXPENSES_DESCRIPTION = "description";
@@ -91,7 +94,7 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
             "'" + TABLE_WAITING_FOR_APPROVAL_FAMILY_ID + "' INTEGER(11) NOT NULL," +
             "'" + TABLE_WAITING_FOR_APPROVAL_USER_ID + "' INTEGER(11) NOT NULL," +
             " FOREIGN KEY ('" + TABLE_WAITING_FOR_APPROVAL_FAMILY_ID + "') REFERENCES " + TABLE_FAMILIES + "('" + TABLE_FAMILIES_ID + "')," +
-            " FOREIGN KEY ('" + TABLE_WAITING_FOR_APPROVAL_USER_ID + "') REFERENCES " + TABLE_USERS + "('" + TABLE_USERS_ID + "'))";
+            " FOREIGN KEY ('" + TABLE_WAITING_FOR_APPROVAL_USER_ID + "') REFERENCES " + TABLE_USERS + "('" + TABLE_USERS_ID + "'))";*/
 
 
     public static final String MYERROR = "MYERROR";
@@ -102,21 +105,39 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_CATEGORIES);
-        db.execSQL(CREATE_TABLE_USERS);
-        db.execSQL(CREATE_TABLE_FAMILIES);
-        db.execSQL(CREATE_TABLE_EXPENSES);
-        db.execSQL(CREATE_TABLE_WAITING_FOR_APPROVAL);
+        db.execSQL(Constants.CREATE_TABLE_CATEGORIES);
+        db.execSQL(Constants.CREATE_TABLE_USERS);
+        db.execSQL(Constants.CREATE_TABLE_FAMILIES);
+        db.execSQL(Constants.CREATE_TABLE_EXPENSES);
+        db.execSQL(Constants.CREATE_TABLE_REQUESTS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAMILIES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSES);
-        db.execSQL("DROP TABLE IF EXISTS " +  TABLE_WAITING_FOR_APPROVAL);
+        db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_CATEGORIES);
+        db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_FAMILIES);
+        db.execSQL("DROP TABLE IF EXISTS " + Constants.TABLE_EXPENSES);
+        db.execSQL("DROP TABLE IF EXISTS " +  Constants.TABLE_REQUESTS);
         onCreate(db);
+    }
+
+    public int getUserId(String username) {
+        SQLiteDatabase db = null;
+        int userId = 0;
+        try {
+            db = getReadableDatabase();
+            String sql = "SELECT " + Constants.TABLE_USERS_ID + " FROM " + Constants.TABLE_USERS +
+                    " WHERE " + Constants.TABLE_USERS_USERNAME + " = '" + username + "'";
+            Cursor c = db.rawQuery(sql, null);
+            while (c.moveToNext()) {
+                userId = c.getInt(c.getColumnIndex(Constants.TABLE_USERS_ID));
+            }
+        } catch (Exception e) {
+            Log.wtf(MYERROR, e.getMessage());
+        }
+
+        return userId;
     }
 
     public boolean login(String username, String password) {
@@ -124,9 +145,9 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         try {
             db = getReadableDatabase();
 
-            String sql = "SELECT * FROM " + TABLE_USERS
-                    + " WHERE " + TABLE_USERS_USERNAME + " = '" + username + "'" +
-                    " AND " + TABLE_USERS_PASSWORD + " = '" + password + "'";
+            String sql = "SELECT * FROM " + Constants.TABLE_USERS
+                    + " WHERE " + Constants.TABLE_USERS_USERNAME + " = '" + username + "'" +
+                    " AND " + Constants.TABLE_USERS_PASSWORD + " = '" + password + "'";
 
             Cursor c = db.rawQuery(sql, null);
 
@@ -147,11 +168,11 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         try {
             db = getWritableDatabase();
             ContentValues cv = new ContentValues();
-            cv.put(TABLE_USERS_USERNAME, user.getUsername());
-            cv.put(TABLE_USERS_PASSWORD, user.getPassword());
-            cv.put(TABLE_USERS_NAME, user.getName());
+            cv.put(Constants.TABLE_USERS_USERNAME, user.getUsername());
+            cv.put(Constants.TABLE_USERS_PASSWORD, user.getPassword());
+            cv.put(Constants.TABLE_USERS_NAME, user.getName());
 
-            long id = db.insert(TABLE_USERS, null, cv);
+            long id = db.insert(Constants.TABLE_USERS, null, cv);
             insertFamily(user.getName(), (int) id);
             if (id != -1)
                 return true;
@@ -171,10 +192,10 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         try {
             db = getWritableDatabase();
             ContentValues cv = new ContentValues();
-            cv.put(TABLE_FAMILIES_NAME, FamilyName);
-            cv.put(TABLE_FAMILIES_ADMIN_ID, AdminID);
+            cv.put(Constants.TABLE_FAMILIES_NAME, FamilyName);
+            cv.put(Constants.TABLE_FAMILIES_ADMIN_ID, AdminID);
 
-            long id = db.insert(TABLE_FAMILIES, null, cv);
+            long id = db.insert(Constants.TABLE_FAMILIES, null, cv);
             if (id != -1)
                 return true;
 
@@ -195,10 +216,10 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         List<String> usernames = new ArrayList<String>();
         try {
             db = getReadableDatabase();
-            String sql = "SELECT " + TABLE_USERS_USERNAME + " FROM " + TABLE_USERS;
+            String sql = "SELECT " + Constants.TABLE_USERS_USERNAME + " FROM " + Constants.TABLE_USERS;
             Cursor c = db.rawQuery(sql, null);
             while (c.moveToNext()) {
-                String username = c.getString(c.getColumnIndex(TABLE_USERS_USERNAME));
+                String username = c.getString(c.getColumnIndex(Constants.TABLE_USERS_USERNAME));
                 usernames.add(username);
             }
         } catch (Exception e) {
@@ -208,16 +229,17 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         return usernames;
     }
 
-    public List<String> getCategories() {
+    public List<Category> getCategories() {
         SQLiteDatabase db = null;
-        List<String> categories = new ArrayList<String>();
+        List<Category> categories = new ArrayList<Category>();
         try {
             db = getReadableDatabase();
-            String sql = "SELECT " + TABLE_CATEGORIES_NAME + " FROM " + TABLE_CATEGORIES;
+            String sql = "SELECT " + Constants.TABLE_CATEGORIES_ID + ", " + Constants.TABLE_CATEGORIES_NAME + " FROM " + Constants.TABLE_CATEGORIES;
             Cursor c = db.rawQuery(sql, null);
             while (c.moveToNext()) {
-                String name = c.getString(c.getColumnIndex(TABLE_CATEGORIES_NAME));
-                categories.add(name);
+                int id = Integer.parseInt(c.getString(c.getColumnIndex(Constants.TABLE_CATEGORIES_ID)));
+                String name = c.getString(c.getColumnIndex(Constants.TABLE_CATEGORIES_NAME));
+                categories.add(new Category(id, name));
             }
         } catch (Exception e) {
             Log.wtf(MYERROR, e.getMessage());
@@ -232,9 +254,9 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         try {
             db = getWritableDatabase();
             ContentValues cv = new ContentValues();
-            cv.put(TABLE_CATEGORIES_NAME, name);
+            cv.put(Constants.TABLE_CATEGORIES_NAME, name);
 
-            long id = db.insert(TABLE_CATEGORIES, null, cv);
+            long id = db.insert(Constants.TABLE_CATEGORIES, null, cv);
             if (id != -1)
                 return true;
 
@@ -253,7 +275,7 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         try {
             db = getWritableDatabase();
 
-            long id = db.delete(TABLE_CATEGORIES, TABLE_CATEGORIES_NAME + "=?", new String[]{name});
+            long id = db.delete(Constants.TABLE_CATEGORIES, Constants.TABLE_CATEGORIES_NAME + "=?", new String[]{name});
             if (id != -1)
                 return true;
 
@@ -267,22 +289,60 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    public List<Expense> getExpenses() {
+    public List<Expense> getExpenses(long startDate, long endDate) {
         SQLiteDatabase db = null;
         List<Expense> expenses = new ArrayList<Expense>();
         try {
             db = getReadableDatabase();
-            String sql = "SELECT " + "ex." + TABLE_EXPENSES_DESCRIPTION +
-                    ", ex." + TABLE_EXPENSES_PRICE +
-                    ", c." + TABLE_CATEGORIES_NAME +
-                    " FROM " + TABLE_EXPENSES + " as ex," + TABLE_CATEGORIES + " as c " +
-                    " WHERE ex." + TABLE_EXPENSES_CATEGORY_ID + " = c." + TABLE_CATEGORIES_ID;
+            String userAlias = "userName";
+            String categoryAlias = "categoryName";
+//            String sql = "SELECT " + "u." + Constants.TABLE_USERS_NAME + " as " + userAlias +
+//                    ", ex." + Constants.TABLE_EXPENSES_DESCRIPTION +
+//                    ", ex." + Constants.TABLE_EXPENSES_DATE_OF_ADDING +
+//                    ", ex." + Constants.TABLE_EXPENSES_PRICE +
+//                    ", c." + Constants.TABLE_CATEGORIES_NAME + " as " + categoryAlias +
+//                    " FROM " + Constants.TABLE_EXPENSES + " ex" +
+//                    " INNER JOIN " + Constants.TABLE_USERS + " u on u." + Constants.TABLE_USERS_ID + " = ex." + Constants.TABLE_EXPENSES_USER_ID +
+//                    " INNER JOIN " + Constants.TABLE_CATEGORIES + " c on c." + Constants.TABLE_CATEGORIES_ID + " = ex." + Constants.TABLE_EXPENSES_CATEGORY_ID;
+
+            String sql = "SELECT " + "u." + Constants.TABLE_USERS_NAME + " as " + userAlias +
+                    ", ex." + Constants.TABLE_EXPENSES_DESCRIPTION +
+                    ", ex." + Constants.TABLE_EXPENSES_DATE_OF_ADDING +
+                    ", ex." + Constants.TABLE_EXPENSES_PRICE +
+                    ", c." + Constants.TABLE_CATEGORIES_NAME + " as " + categoryAlias +
+                    " FROM " + Constants.TABLE_EXPENSES + " ex" +
+                    " INNER JOIN " + Constants.TABLE_USERS + " u on u." + Constants.TABLE_USERS_ID + " = ex." + Constants.TABLE_EXPENSES_USER_ID +
+                    " INNER JOIN " + Constants.TABLE_CATEGORIES + " c on c." + Constants.TABLE_CATEGORIES_ID + " = ex." + Constants.TABLE_EXPENSES_CATEGORY_ID +
+                    " WHERE ex." + Constants.TABLE_EXPENSES_DATE_OF_ADDING +
+                    " BETWEEN " + startDate + " AND " + endDate;
+
+
+            String mySql = "SELECT " + "u." + Constants.TABLE_USERS_USERNAME + " as " + userAlias +
+                    ", ex." + Constants.TABLE_EXPENSES_DESCRIPTION +
+                    ", ex." + Constants.TABLE_EXPENSES_DATE_OF_ADDING +
+                    ", ex." + Constants.TABLE_EXPENSES_PRICE +
+                    ", c." + Constants.TABLE_CATEGORIES_NAME + " as " + categoryAlias +
+                    " FROM " + Constants.TABLE_EXPENSES + " ex" +
+                    " INNER JOIN " + Constants.TABLE_USERS + " u on u." + Constants.TABLE_USERS_ID + " = ex." + Constants.TABLE_EXPENSES_USER_ID +
+                    " INNER JOIN " + Constants.TABLE_CATEGORIES + " c on c." + Constants.TABLE_CATEGORIES_ID + " = ex." + Constants.TABLE_EXPENSES_CATEGORY_ID +
+                    " WHERE ex." + Constants.TABLE_EXPENSES_DATE_OF_ADDING +
+                    " BETWEEN " + startDate + " AND " + endDate;
+            Cursor myCursor = db.rawQuery(mySql, null);
+            while (myCursor.moveToNext()){
+                String description = myCursor.getString(myCursor.getColumnIndex(Constants.TABLE_EXPENSES_DESCRIPTION));
+                int a = 4;
+            }
+
             Cursor c = db.rawQuery(sql, null);
             while (c.moveToNext()) {
-                String description = c.getString(c.getColumnIndex(TABLE_EXPENSES_DESCRIPTION));
-                BigDecimal price = new BigDecimal(c.getString(c.getColumnIndex(TABLE_EXPENSES_PRICE)));
-                String category = c.getString(c.getColumnIndex(TABLE_EXPENSES_CATEGORY_ID));
-                Expense expense = new Expense(description, price, category);
+                String userName = c.getString(c.getColumnIndex(userAlias));
+                String description = c.getString(c.getColumnIndex(Constants.TABLE_EXPENSES_DESCRIPTION));
+                BigDecimal price = new BigDecimal(c.getString(c.getColumnIndex(Constants.TABLE_EXPENSES_PRICE)));
+                String category = c.getString(c.getColumnIndex(categoryAlias));
+
+                long dateOfAdding = c.getLong(c.getColumnIndex(Constants.TABLE_EXPENSES_DATE_OF_ADDING));
+                Expense expense = new Expense(userName, description, price, category, dateOfAdding);
+
                 expenses.add(expense);
             }
         } catch (Exception e) {
@@ -292,30 +352,17 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         return expenses;
     }
 
-   public String CurrentUser(String username){
-        SQLiteDatabase db = null;
-       db = getReadableDatabase();
-
-       String sql = "SELECT * FROM " + TABLE_USERS
-               + " WHERE " + TABLE_USERS_USERNAME + " = '" + username + "'";
-
-
-       Cursor c = db.rawQuery(sql, null);
-
-       return username;
-   }
-
    public List<String> getFamilies(){
 
        SQLiteDatabase db = null;
        List<String> families = new ArrayList<String>();
        try {
            db = getReadableDatabase();
-           String sql = "SELECT "  + TABLE_FAMILIES_NAME
-                   +" FROM " + TABLE_FAMILIES;
+           String sql = "SELECT "  + Constants.TABLE_FAMILIES_NAME
+                   +" FROM " + Constants.TABLE_FAMILIES;
            Cursor c = db.rawQuery(sql, null);
            while (c.moveToNext()) {
-               String FamilyName = c.getString(c.getColumnIndex(TABLE_FAMILIES_NAME));
+               String FamilyName = c.getString(c.getColumnIndex(Constants.TABLE_FAMILIES_NAME));
                families.add(FamilyName);
            }
        } catch (Exception e) {
@@ -324,4 +371,30 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
 
        return families;
    }
+
+    public boolean addExpense(int userId, int categoryId, BigDecimal price, long date, String description) {
+        SQLiteDatabase db = null;
+
+        try {
+            db = getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put(Constants.TABLE_EXPENSES_USER_ID, userId);
+            cv.put(Constants.TABLE_EXPENSES_CATEGORY_ID, categoryId);
+            cv.put(Constants.TABLE_EXPENSES_PRICE, price.toString());
+            cv.put(Constants.TABLE_EXPENSES_DATE_OF_ADDING, date);
+            cv.put(Constants.TABLE_EXPENSES_DESCRIPTION, description);
+
+            long id = db.insert(Constants.TABLE_EXPENSES, null, cv);
+            if (id != -1)
+                return true;
+
+        } catch (SQLException e) {
+            Log.wtf("MYERROR", e.getMessage());
+        } finally {
+            if (db != null)
+                db.close();
+        }
+
+        return false;
+    }
 }

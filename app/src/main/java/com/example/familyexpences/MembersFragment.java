@@ -39,12 +39,7 @@ public class MembersFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    EditText MemberUserNameET;
-    EditText MemberNameET;
-    EditText MemberPasswordET;
-    EditText MemberRepeatPasswordET;
-    Button AddMemberBT;
-    ListView MembersLV;
+      ListView MembersLV;
 
     public MembersFragment() { }
 
@@ -91,13 +86,7 @@ public class MembersFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
-        MemberUserNameET = (EditText) getView().findViewById(R.id.MemberUserNameET);
-        MemberNameET = (EditText) getView().findViewById(R.id.MemberNameET);
-        MemberPasswordET = (EditText) getView().findViewById(R.id.MemberPasswordET);
-        MemberRepeatPasswordET = (EditText) getView().findViewById(R.id.MemberRepeatPasswordET);
         MembersLV  = (ListView) getView().findViewById(R.id.MembersLV);
-        AddMemberBT = (Button) getView().findViewById(R.id.AddMemberBT);
 
         viewData();
 

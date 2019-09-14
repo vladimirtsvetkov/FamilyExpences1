@@ -3,12 +3,15 @@ package com.example.familyexpences;
 import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.familyexpences.Constants.Constants;
 import com.example.familyexpences.DB.SQLiteDatabaseHelper;
 
 public class LoginActivity extends AppCompatActivity {
@@ -45,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
                     final String username = usernameET.getText().toString();
                     final String password = passwordET.getText().toString();
                     if (db.login(username, password)) {
+                        SharedPreferences sp = getSharedPreferences(Constants.LOGIN, MODE_PRIVATE);
+                        sp.edit().putString(Constants.LOGGED_USER, username).apply();
+
                         intent = new Intent(LoginActivity.this, Main2Activity.class);
                         intent.putExtra("username",username);
                         startActivity(intent);

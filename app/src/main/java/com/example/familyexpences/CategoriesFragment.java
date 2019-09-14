@@ -79,13 +79,10 @@ public class CategoriesFragment extends Fragment {
 
     public void viewData() {
         final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
-        final List<String> CategoriesList = db.getCategories();
+        final List<Category> CategoriesList = db.getCategories();
 
-        ArrayAdapter<String> CategoriesAdapter = new ArrayAdapter<String>(
-                getActivity(),
-                R.layout.support_simple_spinner_dropdown_item,
-                CategoriesList);
-        CategoryLV.setAdapter(CategoriesAdapter);
+        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(getActivity(), android.R.layout.simple_spinner_item,CategoriesList);
+        CategoryLV.setAdapter(adapter);
     }
 
     @Override

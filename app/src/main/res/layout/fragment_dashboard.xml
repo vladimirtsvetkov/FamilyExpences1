@@ -15,224 +15,110 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <CalendarView
-        android:id="@+id/calendar_View2"
-        android:layout_width="match_parent"
-        android:layout_height="330dp"
-        android:layout_marginTop="32dp" />
-
-    <TextView
-        android:id="@+id/current_month_income_TV"
-        android:layout_width="149dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="247dp"
-        android:text="Current Month Income:" />
-
-    <TextView
-        android:id="@+id/current_month_expense_TV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="226dp"
-        android:text="Current Month Expences:" />
-
-        <TableLayout
-            android:id="@+id/tableLayout1"
+        <CalendarView
+            android:id="@+id/dashboardCalendar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:shrinkColumns="*"
-            android:stretchColumns="*">
+            android:layout_height="330dp"
+            android:layout_marginTop="32dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <TableRow
-                android:id="@+id/tableRow_title"
+            <TableLayout
+                android:id="@+id/tableLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#16a085"
-                android:gravity="center_horizontal">
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="0,1,2,3,4">
 
-                <TextView
-                    android:id="@+id/textView9"
+                <TableRow
+                    android:id="@+id/tableRow_title"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_span="6"
-                    android:gravity="center"
-                    android:text="Expenses for"
-                    android:textColor="#ffffff"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
-                    android:typeface="serif" />
-            </TableRow>
+                    android:layout_height="wrap_content"
+                    android:background="#16a085"
+                    android:gravity="center_horizontal">
 
-            <TableRow
-                android:id="@+id/tableRow_item"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#1abc9c"
-                android:gravity="center"
-                android:padding="5dp">
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_span="6"
+                        android:gravity="center"
+                        android:text="Current family expenses"
+                        android:textColor="#ffffff"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:typeface="serif" />
+                </TableRow>
 
-                <TextView
-                    android:id="@+id/TextView_item_name"
-                    android:text="Item"
-                    android:textColor="#000000"
-                    android:typeface="serif" />
-
-                <TextView
-                    android:id="@+id/TextView_quantity_no"
-                    android:text="Description"
-                    android:textColor="#000000"
-                    android:typeface="serif" />
-
-                <TextView
-                    android:id="@+id/TextView_availability"
-                    android:text="Price"
-                    android:textColor="#000000"
-                    android:typeface="serif" />
-
-                <TextView
-                    android:id="@+id/textView_Delete"
+                <TableRow
+                    android:id="@+id/tableRow_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="#1abc9c"
                     android:gravity="center"
-                    android:text="Delete"
-                    android:textColor="#000000"
-                    android:typeface="serif" />
-            </TableRow>
+                    android:padding="5dp">
 
-            <TableRow
-                android:id="@+id/tableRow_detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:background="#bdc3c7"
-                android:gravity="center">
+                    <TextView
+                        android:id="@+id/TextView_user_name"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="User"
+                        android:textColor="#000000"
+                        android:typeface="serif" />
 
-                <TextView
-                    android:id="@+id/TextView_item"
-                    android:text="Apple"
-                    android:typeface="serif" />
+                    <TextView
+                        android:id="@+id/TextView_item_name"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Category"
+                        android:textColor="#000000"
+                        android:typeface="serif" />
 
-                <TextView
-                    android:id="@+id/TextView_quantity"
-                    android:text="10 kg"
-                    android:typeface="serif" />
+                    <TextView
+                        android:id="@+id/TextView_quantity_no"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Descr."
+                        android:textColor="#000000"
+                        android:typeface="serif" />
 
-                <TextView
-                    android:id="@+id/TextView_available"
-                    android:text="Yes"
-                    android:typeface="serif" />
+                    <TextView
+                        android:id="@+id/TextView_availability"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Price"
+                        android:textColor="#000000"
+                        android:typeface="serif" />
 
-                <TextView
-                    android:id="@+id/textView_Delete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_delete_style"
-                    android:gravity="center"
-                    android:text="Delete"
-                    android:textColor="@android:color/background_light"
-                    android:textSize="24sp"
-                    android:typeface="serif" />
-            </TableRow>
+                    <TextView
+                        android:id="@+id/textView_Delete"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Delete"
+                        android:textColor="#000000"
+                        android:typeface="serif" />
+                </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:background="#bdc3c7"
-                android:gravity="center">
-
-                <TextView
-                    android:text="orange"
-                    android:typeface="serif" />
-
-                <TextView
-                    android:text="20 kg"
-                    android:typeface="serif" />
-
-                <TextView
-                    android:text="Yes"
-                    android:typeface="serif" />
-
-                <TextView
-                    android:id="@+id/textView_available2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_delete_style"
-                    android:gravity="center"
-                    android:text="Delete"
-                    android:textColor="@android:color/background_light"
-                    android:textSize="24sp"
-                    android:typeface="serif" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:background="#bdc3c7"
-                android:gravity="center">
-
-                <TextView
-                    android:text="Banana"
-                    android:typeface="serif" />
-
-                <TextView
-                    android:text="40 kg"
-                    android:typeface="serif" />
-
-                <TextView
-                    android:text="Yes"
-                    android:typeface="serif"></TextView>
-
-                <TextView
-                    android:id="@+id/textView_available3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_delete_style"
-                    android:gravity="center"
-                    android:text="Delete"
-                    android:textColor="@android:color/background_light"
-                    android:textSize="24sp"
-                    android:typeface="serif" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:background="#bdc3c7"
-                android:gravity="center">
-
-                <TextView
-                    android:text="Apricot"
-                    android:typeface="serif"></TextView>
-
-                <TextView
-                    android:text="20 kg"
-                    android:typeface="serif"></TextView>
-
-                <TextView
-                    android:text="No"
-                    android:typeface="serif"></TextView>
-
-                <TextView
-                    android:id="@+id/textView_available4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/btn_delete_style"
-                    android:gravity="center"
-                    android:text="Delete"
-                    android:textColor="@android:color/background_light"
-                    android:textSize="24sp"
-                    android:typeface="serif" />
-            </TableRow>
-
-        </TableLayout>
+            </TableLayout>
+        </LinearLayout>
+        <ListView
+            android:id="@+id/expensesListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 </ScrollView>
