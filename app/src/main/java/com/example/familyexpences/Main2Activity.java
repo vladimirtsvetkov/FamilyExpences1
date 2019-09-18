@@ -93,7 +93,6 @@ public class Main2Activity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main2, menu);
 
         //Add Dashboard on login
-
         Fragment fragment = new DashboardFragment();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
@@ -122,27 +121,19 @@ public class Main2Activity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Fragment fragment = null;
-
-
         if (id == R.id.nav_dashboard) {
             fragment  = new DashboardFragment();
-
         }else if(id==R.id.nav_expenses)
         {   fragment = new ExpensesFragment();
-
         } else if (id == R.id.nav_categories) {
             fragment = new CategoriesFragment();
-
         } else if (id == R.id.nav_members) {
             fragment= new MembersFragment();
-
         } else if (id == R.id.nav_statistics) {
             fragment  = new StatisticsFragment();
-
         } else if(id == R.id.nav_reports){
-
+            fragment = new ReportsFragment();
         } else if (id == R.id.nav_share) {
-
         } else if (id == R.id.nav_exit) {
             SharedPreferences sp = getSharedPreferences(Constants.LOGIN, MODE_PRIVATE);
             sp.edit().putString(Constants.LOGGED_USER, "").apply();

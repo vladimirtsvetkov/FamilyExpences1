@@ -21,7 +21,7 @@ public class RegisterActivity extends AppCompatActivity {
     LinearLayout background;
     EditText usernameET;
     EditText passwordET;
-    EditText nameET;
+    EditText FamilynameET;
     EditText repeatPasswordET;
     Button createBtn;
     Button RegisterNewFamilyMemberBT;
@@ -36,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
         usernameET = findViewById(R.id.usernameET);
         passwordET = findViewById(R.id.passwordET);
         repeatPasswordET = findViewById(R.id.repeatPasswordET);
-        nameET = findViewById(R.id.nameET);
+        FamilynameET = findViewById(R.id.FamilynameET);
 
         createBtn = findViewById(R.id.createBtn);
         RegisterNewFamilyMemberBT = findViewById(R.id.RegisterNewFamilyMemberBT);
@@ -57,13 +57,13 @@ public class RegisterActivity extends AppCompatActivity {
                 case R.id.createBtn:
                     String username = usernameET.getText().toString();
                     String password = passwordET.getText().toString();
-                    String name = nameET.getText().toString();
+                    String name = FamilynameET.getText().toString();
 
                     User user = new User(username, password, name);
                     
                     if (usernameET.getText().length() == 0 ||
                             passwordET.getText().length() == 0 ||
-                            nameET.getText().length() == 0 ||
+                            FamilynameET.getText().length() == 0 ||
                             !passwordET.getText().toString().
                                     equals(repeatPasswordET.getText().toString())) {
                         Snackbar.make(background, "Error, fill valid data!", Snackbar.LENGTH_LONG)
@@ -72,8 +72,11 @@ public class RegisterActivity extends AppCompatActivity {
                     }
 //
                     SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(RegisterActivity.this);
-
-                    if (db.insertUser(user)) {
+                    int UserId = db.insertUser(user);
+                    if (UserId !=0) {
+                        int Family_Id = db.insertFamily(name, UserId);
+                        db.updateUser(Family_Id,UserId);
+                        //todo db.updateUser(int FamilyID, int userId)
                         intent = new Intent(RegisterActivity.this, Main2Activity.class);
                         intent.putExtra("username",username);
                         startActivity(intent);

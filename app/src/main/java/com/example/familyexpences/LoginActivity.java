@@ -1,5 +1,7 @@
 package com.example.familyexpences;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,17 +49,17 @@ public class LoginActivity extends AppCompatActivity {
 
                     final String username = usernameET.getText().toString();
                     final String password = passwordET.getText().toString();
-                    if (db.login(username, password)) {
-                        SharedPreferences sp = getSharedPreferences(Constants.LOGIN, MODE_PRIVATE);
-                        sp.edit().putString(Constants.LOGGED_USER, username).apply();
+                            if (db.login(username, password)) {
+                                SharedPreferences sp = getSharedPreferences(Constants.LOGIN, MODE_PRIVATE);
+                                sp.edit().putString(Constants.LOGGED_USER, username).apply();
+                                intent = new Intent(LoginActivity.this, Main2Activity.class);
+                                intent.putExtra("username", username);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Wrong username or password",
+                                        Toast.LENGTH_LONG).show();
+                            }
 
-                        intent = new Intent(LoginActivity.this, Main2Activity.class);
-                        intent.putExtra("username",username);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Wrong username or password",
-                                Toast.LENGTH_LONG).show();
-                    }
                     break;
                 case R.id.registerBtn:
                     intent = new Intent(LoginActivity.this, RegisterActivity.class);

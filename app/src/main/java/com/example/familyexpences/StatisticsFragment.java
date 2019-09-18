@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.familyexpences.DB.SQLiteDatabaseHelper;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -47,27 +48,25 @@ public class StatisticsFragment extends Fragment {
         pieChart = view.findViewById(R.id.pieChart);
 
 
-        pieChart.setUsePercentValues(true);
+        pieChart.setUsePercentValues(false);
         pieChart.getDescription().setEnabled(false);
         pieChart.setExtraOffsets(5,10,5, 5);
         pieChart.setDragDecelerationFrictionCoef(0.99f);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleColor(Color.WHITE);
         pieChart.setTransparentCircleRadius(61f);
+        pieChart.animateY(500);
 
         ArrayList<PieEntry> yVaues = new ArrayList<>();
-        yVaues.add(new PieEntry(3f , "Food"));
-        yVaues.add(new PieEntry(10f, "cigarettes"));
-        yVaues.add(new PieEntry(10f, "Car"));
-        yVaues.add(new PieEntry(10f, "Rakia"));
-        yVaues.add(new PieEntry(10f, "Vodka"));
-        yVaues.add(new PieEntry(10f, "Pasta"));
-        yVaues.add(new PieEntry(10f, "Salad"));
-        yVaues.add(new PieEntry(10f, "Tomato"));
-        yVaues.add(new PieEntry(10f, "Kartofi"));
-        yVaues.add(new PieEntry(10f, "Wiski"));
+        yVaues.add(new PieEntry(125f , "Food"));
+        yVaues.add(new PieEntry(250f, "Car"));
+        yVaues.add(new PieEntry(135f, "Home"));
+        yVaues.add(new PieEntry(19f, "Garden"));
+        yVaues.add(new PieEntry(18f, "Other"));
+        yVaues.add(new PieEntry(98f, "Clothes"));
 
-        pieChart.animateY(500);
+        // SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
+        //        ArrayList<PieEntry> pieEntries = db.getPieEntries();
 
         PieDataSet dataSet = new PieDataSet(yVaues, "");
         dataSet.setSliceSpace(3f);

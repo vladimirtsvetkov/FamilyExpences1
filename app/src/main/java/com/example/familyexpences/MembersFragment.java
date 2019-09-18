@@ -1,5 +1,9 @@
 package com.example.familyexpences;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,9 +18,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.familyexpences.Constants.Constants;
 import com.example.familyexpences.DB.SQLiteDatabaseHelper;
 
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -36,6 +43,8 @@ public class MembersFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    public int familyAdminID;
+    public int FamilyId;
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,10 +69,81 @@ public class MembersFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+        final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
+
+        SharedPreferences sp = getActivity().getSharedPreferences(Constants.LOGIN, MODE_PRIVATE);
+        String loggedUser = sp.getString(Constants.LOGGED_USER, "");
+        familyAdminID = db.getFamilyAdminId(db.getUserId(loggedUser));
+        FamilyId = db.getFamilyIDByAdmin(familyAdminID);
+
+        if(familyAdminID != 0 ){
+            Toast.makeText(getActivity(),"You are admin!",Toast.LENGTH_SHORT).show();
+
+            final String userName = db.checkRequests(FamilyId);
+            if( userName != ""){
+                AlertDialog alert = new AlertDialog.Builder(getActivity()).create();
+                alert.setTitle("New request");
+                alert.setMessage("User " + userName + " would like to join the family.");
+                alert.setButton(Dialog.BUTTON_POSITIVE,"Accept",new DialogInterface.OnClickListener(){
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        int UserId = db.getUserId(userName);
+                        if (db.acceptRequest(FamilyId,UserId)){
+                            Toast.makeText(getActivity(),"Accepted!",Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(),"Something went wrong!",Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }
+                });
+                alert.setButton(Dialog.BUTTON_NEGATIVE,"Delete",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        int UserId = db.getUserId(userName);
+
+                        if(db.deleteRequest(UserId)){
+                            Toast.makeText(getActivity(),"Deleted!",Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(),"Something went wrong!",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                alert.show();
+            } else {
+                AlertDialog alert = new AlertDialog.Builder(getActivity()).create();
+                alert.setTitle("No new request");
+                alert.setMessage("Check this page for new requests");
+                alert.setButton(Dialog.BUTTON_POSITIVE,"OK",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //nothing - no new requests
+                    }
+                });
+
+
+                alert.show();
+            }
+
+
+        }
+
     }
     public void viewData() {
+
         final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
-        final List<String> MembersList = db.getUsers();
+
+        SharedPreferences sp = getActivity().getSharedPreferences(Constants.LOGIN, MODE_PRIVATE);
+        String loggedUser = sp.getString(Constants.LOGGED_USER, "");
+        final int familyAdminID = db.getFamilyAdminId(db.getUserId(loggedUser));
+
+        final List<String> MembersList = db.getFamilyMembers(familyAdminID);
         System.out.println(MembersList);
 
         ArrayAdapter<String> MembersAdapter = new ArrayAdapter<String>(
@@ -90,23 +170,6 @@ public class MembersFragment extends Fragment {
 
         viewData();
 
-        /*AddCategoryBT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(AddCategoryET.getText().length() == 0){
-                    Toast.makeText(getActivity(),"Enter Category!",Toast.LENGTH_SHORT).show();
-                }else{
-                    final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
-                    if (db.addCategory(AddCategoryET.getText().toString())) {
-                        Toast.makeText(getActivity(),"Success! " + AddCategoryET.getText().toString()+ " was added to the list!" ,Toast.LENGTH_SHORT).show();
-                        AddCategoryET.setText("");
-                        viewData();
-                    } else {
-                        Toast.makeText(getActivity(),"Error!",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });*/
     }
 
     // TODO: Rename method, update argument and hook method into UI event
