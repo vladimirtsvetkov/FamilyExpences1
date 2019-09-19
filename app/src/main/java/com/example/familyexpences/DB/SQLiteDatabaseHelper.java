@@ -492,7 +492,8 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
             String sql = " SELECT " + Constants.TABLE_USERS_USERNAME +" FROM " + Constants.TABLE_USERS + " AS u"+
                            " JOIN " + Constants.TABLE_REQUESTS + " AS req ON req." + Constants.TABLE_REQUESTS_USER_ID + " = " +
                               " u." + Constants.TABLE_USERS_ID + " WHERE " +
-                            Constants.TABLE_REQUESTS_FAMILY_ID + " = " + familyID ;
+                            Constants.TABLE_REQUESTS_FAMILY_ID + " = " + familyID + " AND " +
+                            Constants.TABLE_REQUESTS_IS_APPROVED + " = " + 0 ;
 
             Cursor c = db.rawQuery(sql, null);
 
@@ -535,13 +536,13 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
 
             ContentValues cv = new ContentValues();
             cv.put(Constants.TABLE_USERS_FAMILY_ID,FamilyId);
+
             db.update(Constants.TABLE_USERS,cv,Constants.TABLE_USERS_ID + "=" + UserId,null);
 
-            //delete request - it is approved
-            db.delete(Constants.TABLE_REQUESTS, Constants.TABLE_REQUESTS_USER_ID + "=" + UserId, null);
+            //update request - it is approved
+            cv.put(Constants.TABLE_REQUESTS_IS_APPROVED,1);
+            db.update(Constants.TABLE_REQUESTS, cv,Constants.TABLE_REQUESTS_USER_ID + "=" + UserId, null);
 
-
-            return true;
         } catch (Exception e) {
             Log.wtf(MYERROR, e.getMessage());
         }
