@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class DashboardFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     CalendarView calendarView;
     ListView expensesListView;
+    Button buttonDeleteExpense;
 
     public DashboardFragment() { }
 
@@ -53,7 +55,16 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         calendarView = (CalendarView) view.findViewById(R.id.dashboardCalendar);
+        buttonDeleteExpense = (Button) view.findViewById(R.id.buttonDeleteExpense);
+
         final SQLiteDatabaseHelper db = new SQLiteDatabaseHelper(getActivity());
+
+        buttonDeleteExpense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.deleteExpense();
+            }
+        });
 
         Date myDate = this.getYesterday(calendarView.getDate());
         Date lastDate = this.getMidnight(calendarView.getDate());

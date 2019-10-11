@@ -23,7 +23,7 @@ public final class Constants {
 
     public static final String TABLE_CATEGORIES_ID = "id";
     public static final String TABLE_CATEGORIES_NAME = "name";
-    //  add public static final String TABLE_CATEGORIES_USER_ID = "user_id";
+    public static final String TABLE_CATEGORIES_USER_ID = "user_id";
 
     public static final String TABLE_EXPENSES_ID = "id";
     public static final String TABLE_EXPENSES_CATEGORY_ID = "category_id";
@@ -43,12 +43,15 @@ public final class Constants {
             "'" + TABLE_USERS_FAMILY_ID + "' INTEGER(11) ," +
             "'" + TABLE_USERS_USERNAME + "' varchar(50) NOT NULL UNIQUE," +
             "'" + TABLE_USERS_PASSWORD + "' varchar(50) NOT NULL," +
-            "'" + TABLE_USERS_NAME + "' varchar(50) NOT NULL)";
+            "'" + TABLE_USERS_NAME + "' varchar(50) NOT NULL),";
 
 
     public static final String CREATE_TABLE_CATEGORIES = "CREATE TABLE " + TABLE_CATEGORIES
             + "('" + TABLE_CATEGORIES_ID + "' INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "'" + TABLE_CATEGORIES_NAME + "' VARCHAR(50) NOT NULL)";
+            "'" + TABLE_CATEGORIES_NAME + "' VARCHAR(50) NOT NULL)," +
+            "'" + TABLE_CATEGORIES_USER_ID + "' VARCHAR(50) NOT NULL)" +
+            " FOREIGN KEY ('" + TABLE_CATEGORIES_USER_ID + "') REFERENCES " + TABLE_USERS +
+            " ('" + TABLE_USERS_ID + "'))";;
 
 
     public static final String CREATE_TABLE_FAMILIES = "CREATE TABLE " + TABLE_FAMILIES

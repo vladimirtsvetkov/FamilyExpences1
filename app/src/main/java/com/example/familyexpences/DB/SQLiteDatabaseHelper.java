@@ -379,16 +379,18 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
             db = getReadableDatabase();
             String userAlias = "userName";
             String categoryAlias = "categoryName";
-            String sql = "SELECT " + "u." + Constants.TABLE_USERS_NAME + " as " + userAlias +
+            String sql = "SELECT " + "u." + Constants.TABLE_USERS_USERNAME + " as " + userAlias +
                     ", ex." + Constants.TABLE_EXPENSES_DESCRIPTION +
                     ", ex." + Constants.TABLE_EXPENSES_DATE_OF_ADDING +
                     ", ex." + Constants.TABLE_EXPENSES_PRICE +
                     ", c." + Constants.TABLE_CATEGORIES_NAME + " as " + categoryAlias +
                     " FROM " + Constants.TABLE_EXPENSES + " ex" +
                     " INNER JOIN " + Constants.TABLE_USERS + " u on u." + Constants.TABLE_USERS_ID + " = ex." + Constants.TABLE_EXPENSES_USER_ID +
+                    //" INNER JOIN " + Constants.TABLE_FAMILIES + " f on f." + Constants.TABLE_FAMILIES_ID + " = u." + Constants.TABLE_USERS_FAMILY_ID +
                     " INNER JOIN " + Constants.TABLE_CATEGORIES + " c on c." + Constants.TABLE_CATEGORIES_ID + " = ex." + Constants.TABLE_EXPENSES_CATEGORY_ID +
                     " WHERE ex." + Constants.TABLE_EXPENSES_DATE_OF_ADDING +
                     " BETWEEN " + startDate + " AND " + endDate;
+                    //" AND f." + Constants.TABLE_FAMILIES_ID + " = " + 1 ;
 
 
             Cursor c = db.rawQuery(sql, null);
@@ -547,6 +549,10 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
             Log.wtf(MYERROR, e.getMessage());
         }
         return false;
+    }
+
+    public boolean deleteExpense(){
+        return true;
     }
 
 
